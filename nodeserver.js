@@ -9,7 +9,7 @@ const express = require('express');
 const fs = require('fs');
 const axios = require('axios');
 const app = express();
-const parseUrl = require('./parseUrl');
+const parseUrl = require('./Utils/parseUrl');
 const port = 3000;
 
 app.get('/get', (req, res) => {
