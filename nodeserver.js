@@ -76,6 +76,57 @@ app.get('/CalculateMemoryConsumption', (req, res) => {
     res.send(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
 });
 
+
+/**
+ * - `/ReturnColorCode`:
+    - 通过查询字符串接收名为 `color` 的参数
+    - 读取 `colors.json` 文件并返回 `rgba` 字段
+    - 从查询字符串获取 `color` 变量
+    - 遍历 `colors.json` 中的每种颜色以找到该颜色
+    - 返回 `code.hex` 字段
+ */
+
+app.get('/ReturnColorCode', (req, res) => {
+    const color = req.query.color;
+    fs.readFile('colors.json', 'utf8', (err, data) => {
+        if (err) {
+            res.send('Error reading file');
+        } else {
+            const colors = JSON.parse(data);
+            for (const c of colors) {
+                if (c.color === color) {
+                    res.send(c.code.hex);
+                }
+            }
+            res.send('Color not found');
+        }
+    });
+})
+
+/**
+ * - `/ValidateSpanishDNI`:
+    - 通过查询字符串接收名为 `dni` 的参数
+    - 计算 DNI 字母
+    - 如果 DNI 有效则返回 "valid"，如果无效则返回 "invalid"
+ */
+
+app.get('/ValidateSpanishDNI', (req, res) => {
+    const dni = req.query.dni;
+    const letter = 'TRWAGMYFPDXBNJZSQVHLCKE';
+    const regex = /^[0-9]{8}[A-Z]$/;
+    if (regex.test(dni)) {
+        const number = dni.substring(0, 8);
+        const mod = number % 23;
+        if (letter.charAt(mod) === dni.charAt(8)) {
+            res.send('valid');
+        } else {
+            res.send('invalid');
+        }
+    } else {
+        res.send('invalid');
+    }
+})
+
 app.all('*', (req, res) => {
     res.send('method not supported');
 });
