@@ -7,6 +7,7 @@
 
 const fs = require('fs');
 const archiver = require('archiver');
+const zlib = require('zlib');
 const express = require('express');
 const axios = require('axios');
 const readline = require('readline');

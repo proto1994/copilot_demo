@@ -23,17 +23,67 @@ describe('Node Server', () => {
         });
     });
 
-    //add test to check get when key is equal to world
+    // Test for validatePhoneNumber
+    it('should return "valid" for a valid Spanish phone number', (done) => {
+        http
+        .get('http://localhost:3000/ValidatePhoneNumber?phoneNumber=+34600123456' , (res) => {
+            let data = '';
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+            res.on('end', () => {
+                assert.equal(data, 'valid');
+                done();
+            });
+        });
+    });
 
-    //add test to check validatephoneNumber
+    // Test for validateSpanishDNI
+    it('should return "valid" for a valid Spanish DNI', (done) => {
+        http
+        .get('http://localhost:3000/ValidateSpanishDNI?dni=12345678Z' , (res) => {
+            let data = '';
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+            res.on('end', () => {
+                assert.equal(data, 'valid');
+                done();
+            });
+        });
+    });
 
-    //write test to validate validateSpanishDNI
-   
+    // Test for returnColorCode
+    it('should return "#FF0000" for color red', (done) => {
+        http
+        .get('http://localhost:3000/ReturnColorCode?color=red' , (res) => {
+            let data = '';
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+            res.on('end', () => {
+                assert.equal(data, '#FF0000');
+                done();
+            });
+        });
+    });
 
-    //write test for returnColorCode red should return code #FF0000
+    // Test for daysBetweenDates
+    it('should return the correct number of days between two dates', (done) => {
+        http
+        .get('http://localhost:3000/DaysBetweenDates?date1=2022-01-01&date2=2022-01-31' , (res) => {
+            let data = '';
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+            res.on('end', () => {
+                assert.equal(data, 'Days between dates: 30');
+                done();
+            });
+        });
+    });
 
 
-   //write test for daysBetweenDates
 
 
 
