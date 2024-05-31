@@ -99,6 +99,7 @@ app.get('/ReturnColorCode', (req, res) => {
             for (const c of colors) {
                 if (c.color === color) {
                     res.send(c.code.hex);
+                    return;
                 }
             }
             res.send('Color not found');
