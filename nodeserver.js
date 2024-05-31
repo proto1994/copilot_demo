@@ -18,6 +18,56 @@ app.get('/get', (req, res) => {
     }
 });
 
+// `/DaysBetweenDates`:
+app.get('/DaysBetweenDates', (req, res) => {
+    const date1 = new Date(req.query.date1);
+    const date2 = new Date(req.query.date2);
+    const diffTime = Math.abs(date2 - date1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    res.send('Days between dates: ' + diffDays);
+});
+
+// `/ValidatePhoneNumber`:
+app.get('/ValidatePhoneNumber', (req, res) => {
+    const phoneNumber = req.query.phoneNumber;
+    const regex = /^\+34[6-9][0-9]{8}$/;
+    if (regex.test(phoneNumber)) {
+        res.send('valid');
+    } else {
+        res.send('invalid');
+    }
+});
+
+// `/TellMeAJoke`:
+app.get('/TellMeAJoke', async (req, res) => {
+    // You need to find a joke API and replace the URL below
+    const response = await axios.get('https://api.jokeapi.dev/joke');
+    res.send(response.data.joke);
+});
+
+// `/MoviesByDirector`:
+app.get('/MoviesByDirector', async (req, res) => {
+    // You need to find a movie API and replace the URL below
+    const response = await axios.get('https://api.movieapi.dev/director/' + req.query.director);
+    res.send(response.data.movies);
+});
+
+app.get('/ListFiles', (req, res) => {
+    fs.readdir('.', (err, files) => {
+        if (err) {
+            res.send('Error reading files');
+        } else {
+            res.send(files);
+        }
+    });
+});
+
+// `/CalculateMemoryConsumption`:
+app.get('/CalculateMemoryConsumption', (req, res) => {
+    const used = process.memoryUsage().heapUsed / 1024 / 1024;
+    res.send(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
+});
+
 app.all('*', (req, res) => {
     res.send('method not supported');
 });
