@@ -5,9 +5,12 @@
 // if the url has other methods, return "method not supported"
 // when server is listening, log "server is listening on port 3000"
 
+const fs = require('fs');
+const zlib = require('zlib');
 const express = require('express');
 const fs = require('fs');
 const axios = require('axios');
+const readline = require('readline');
 const app = express();
 const parseUrl = require('./Utils/parseUrl');
 const port = 3000;
@@ -126,6 +129,63 @@ app.get('/ValidateSpanishDNI', (req, res) => {
         res.send('invalid');
     }
 })
+
+const countries = [
+    { name: 'Spain', iso: 'ES' },
+    { name: 'France', iso: 'FR' },
+    // Add more European countries here
+];
+
+app.get('/RandomEuropeanCountry', (req, res) => {
+    const randomCountry = countries[Math.floor(Math.random() * countries.length)];
+    res.json(randomCountry);
+});
+
+app.get('/MakeZipFile', (req, res) => {
+    const fileContents = fs.createReadStream('sample.txt');
+    const writeStream = fs.createWriteStream('sample.gz');
+    const zip = zlib.createGzip();
+
+    fileContents
+        .pipe(zip)
+        .pipe(writeStream)
+        .on('finish', () => {
+            res.send('File zipped successfully!');
+        });
+});
+
+app.get('/GetLineByLineFromTextFile', (req, res) => {
+    const fileStream = fs.createReadStream('sample.txt');
+    const lines = readline.createInterface({
+        input: fileStream,
+        crlfDelay: Infinity
+    });
+
+    let result = [];
+    lines.on('line', (line) => {
+        if (line.includes('Fusce')) {
+            result.push(line);
+        }
+    });
+
+    lines.on('close', () => {
+        res.send(result);
+    });
+});
+
+app.get('/GetFullTextFile', (req, res) => {
+    fs.readFile('sample.txt', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send(err);
+            return;
+        }
+
+        const lines = data.split('\n');
+        const result = lines.filter(line => line.includes('Fusce'));
+        res.send(result);
+    });
+});
 
 app.all('*', (req, res) => {
     res.send('method not supported');
