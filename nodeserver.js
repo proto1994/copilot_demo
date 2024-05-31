@@ -6,9 +6,8 @@
 // when server is listening, log "server is listening on port 3000"
 
 const fs = require('fs');
-const zlib = require('zlib');
+const archiver = require('archiver');
 const express = require('express');
-const fs = require('fs');
 const axios = require('axios');
 const readline = require('readline');
 const app = express();
@@ -143,16 +142,19 @@ app.get('/RandomEuropeanCountry', (req, res) => {
 });
 
 app.get('/MakeZipFile', (req, res) => {
-    const fileContents = fs.createReadStream('sample.txt');
-    const writeStream = fs.createWriteStream('sample.gz');
-    const zip = zlib.createGzip();
+    const archive = archiver('zip', {
+        zlib: { level: 9 } // Sets the compression level.
+    });
 
-    fileContents
-        .pipe(zip)
-        .pipe(writeStream)
-        .on('finish', () => {
-            res.send('File zipped successfully!');
-        });
+    const output = fs.createWriteStream('sample.zip');
+
+    output.on('close', () => {
+        res.send('File zipped successfully!');
+    });
+
+    archive.pipe(output);
+    archive.file('sample.txt', { name: 'sample.txt' });
+    archive.finalize();
 });
 
 app.get('/GetLineByLineFromTextFile', (req, res) => {
