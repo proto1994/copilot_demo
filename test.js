@@ -83,8 +83,49 @@ describe('Node Server', () => {
         });
     });
 
+    // Test for DaysBetweenDates
+    it('should return the number of days between two dates', (done) => {
+        http
+        .get('http://localhost:3000/DaysBetweenDates?date1=2022-01-01&date2=2022-01-31' , (res) => {
+            let data = '';
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+            res.on('end', () => {
+                assert.equal(data, 'Days between dates: 30');
+                done();
+            });
+        });
+    });
 
+    // Test for ValidatePhoneNumber
+    it('should return "invalid" for a valid phone number', (done) => {
+        http
+        .get('http://localhost:3000/ValidatePhoneNumber?phoneNumber=+34123456789' , (res) => {
+            let data = '';
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+            res.on('end', () => {
+                assert.equal(data, 'invalid');
+                done();
+            });
+        });
+    });
 
-
+    // Test for DaysBetweenDates
+    it('should return the correct number of days between two dates', (done) => {
+        http
+        .get('http://localhost:3000/DaysBetweenDates?date1=2022-01-01&date2=2022-01-31' , (res) => {
+            let data = '';
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+            res.on('end', () => {
+                assert.equal(data, 'Days between dates: 30');
+                done();
+            });
+        });
+    });
 
 });
