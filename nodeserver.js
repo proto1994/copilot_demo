@@ -16,12 +16,7 @@ const parseUrl = require('./Utils/parseUrl');
 const port = 3000;
 
 app.get('/get', (req, res) => {
-    const key = req.query.key;
-    if (!key) {
-        res.send('key not passed');
-    } else {
-        res.send('hello ' + key);
-    }
+    res.send('hello world');
 });
 
 // `/DaysBetweenDates`:

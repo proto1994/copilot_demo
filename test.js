@@ -9,15 +9,15 @@ const http = require('http');
 const server = require('./nodeserver');
 
 describe('Node Server', () => {
-    it('should return "key not passed" if key is not passed', (done) => {
+    it('should return "hello" + key if key is passed', (done) => {
         http
-        .get('http://localhost:3000/get' , (res) => {
+        .get('http://localhost:3000/get?key=test' , (res) => {
             let data = '';
             res.on('data', (chunk) => {
                 data += chunk;
             });
             res.on('end', () => {
-                assert.equal(data, 'key not passed');
+                assert.equal(data, 'hello world');
                 done();
             });
         });
