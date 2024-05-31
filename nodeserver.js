@@ -6,7 +6,10 @@
 // when server is listening, log "server is listening on port 3000"
 
 const express = require('express');
+const fs = require('fs');
+const axios = require('axios');
 const app = express();
+const parseUrl = require('./parseUrl');
 const port = 3000;
 
 app.get('/get', (req, res) => {
@@ -61,6 +64,11 @@ app.get('/ListFiles', (req, res) => {
         }
     });
 });
+
+app.get('/parseUrl', (req, res) => {
+    const parsedUrl = parseUrl(req.query.url);
+    res.send(parsedUrl);   
+})
 
 // `/CalculateMemoryConsumption`:
 app.get('/CalculateMemoryConsumption', (req, res) => {
