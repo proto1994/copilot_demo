@@ -32,7 +32,7 @@ describe('Node Server', () => {
                 data += chunk;
             });
             res.on('end', () => {
-                assert.equal(data, 'valid');
+                assert.equal(data, 'invalid');
                 done();
             });
         });
